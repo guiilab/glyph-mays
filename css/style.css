@@ -1,0 +1,312 @@
+:root {
+    --padding: .8rem;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+.app-container {
+    width: 100%;
+}
+
+.graph-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: lightgrey;
+    border: black solid 1px;
+    padding: var(--padding);
+    width: 500px;
+}
+
+.app-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: .8rem;
+    display: inline-block;
+}
+
+.level-select-container {
+    display: inline-block;
+    margin-left: 2rem;
+}
+
+.graph-controls {
+    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.highlight-controls {
+    background-color: lightgrey;
+    padding: var(--padding);
+    border-bottom: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.clear-highlight {
+    margin-top: 1rem;
+    height: 30px;
+    font-weight: 700;
+}
+
+.state-graph-container {
+    float: right;
+}
+
+.state-graph-controls {
+    position: absolute;
+    bottom: 0;
+}
+
+.state-graph-title {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+    border: 1px black solid;
+    background-color: lightgrey;
+    width: 100px;
+    padding: var(--padding)
+}
+
+.state-graph-svg {
+    margin: auto;
+}
+
+.state-graph-details {
+    top: 50px;
+    right: 0;
+    position: absolute;
+    background-color: lightgrey;
+    border: 1px solid black;
+    padding: var(--padding)
+}
+
+.sequence-graph-container {
+    border: 1px solid black;
+    word-wrap: wrap;
+    width: 500px;
+    background-color: white;
+    position: absolute;
+    top: 400px;
+    left: 0;
+}
+
+.sequence-graph-controls {
+    position: absolute;
+    margin: .2rem 0 0 .2rem;
+}
+
+.total-sequences {
+    position: absolute;
+    font-style: italic;
+    margin: .2rem 0 0 .2rem;
+}
+
+.num-sequences {
+    font-weight: 700;
+}
+
+/* State Graph */
+
+.statenode {
+    stroke-opacity: .7;
+    fill-opacity: .7;
+    stroke-width: 3;
+}
+
+marker#start {
+    fill: green;
+}
+
+marker#end {
+    fill: #680000;
+}
+
+marker#mid {
+    fill: #5E4E00;
+}
+
+/*
+The part of the graph that consist of crowd behavior. Defined as a class
+*/
+
+marker {
+    stroke-opacity: .4;
+    fill-opacity: .4;
+}
+
+/*
+The part of the graph that consist of a selected path.
+*/
+
+.start {
+    stroke: #000062;
+    fill: #1962FF;
+}
+
+text.start {
+    fill: #000062;
+    stroke: none;
+}
+
+.mid {
+    stroke: #5E4E00;
+    fill: #F5FFA3;
+}
+
+text.mid {
+    fill: #5E4E00;
+    stroke: none;
+}
+
+.end {
+    stroke: #680000;
+    fill: #B74D3D;
+}
+
+text.end {
+    fill: #680000;
+    stroke: none;
+}
+
+.statelink {
+    stroke-opacity: .7;
+    /*        fill-opacity: 0;*/
+    fill: transparent;
+}
+
+/* selected placed here will overshadow start, mid and end */
+
+.selected {
+    stroke: #FF0509;
+    stroke-opacity: 1;
+}
+
+/* Behavior graph */
+
+.behaviornode, .behaviorlink {
+    stroke-opacity: .8;
+    fill-opacity: .8;
+    stroke-width: 3;
+    stroke: #FFFAC9;
+    transition: stroke-width .2s;
+}
+
+.behaviornode {
+    stroke: green;
+    fill: #88F37F;
+}
+
+.selectednode {
+    stroke-width: 5;
+    stroke: #FF0509;
+}
+
+text.complete {
+    fill: green;
+    stroke: none;
+}
+
+.incomplete {
+    fill: #FF77DF;
+    stroke: purple;
+}
+
+text.incomplete {
+    fill: purple;
+    stroke: none;
+}
+
+div.popup {
+    position: absolute;
+    border: 1px solid #bbbbbb;
+    color: #444444;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    /*      pointer-events: none;*/
+}
+
+div.popup table {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+div.popup hr {
+    margin: 5px 0px;
+    border: none;
+    height: 1px;
+    color: #cccccc;
+    background-color: #cccccc;
+}
+
+div.popup p.services {
+    font-size: 11px;
+    line-height: 17px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.hover_image {
+    position: relative;
+}
+
+.hover_image span {
+    position: absolute;
+    display: none;
+    z-index: 99;
+}
+
+.hover_image:hover span {
+    display: block;
+}
+
+text {
+    font-family: sans-serif;
+    pointer-events: none;
+    stroke: none;
+    font-weight: bold;
+}
+
+/*   For coordinates */
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+/* Grid line in the coordinate chart*/
+
+.grid .tick {
+    stroke: lightgrey;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+}
+
+.grid path {
+    stroke-width: 0;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
