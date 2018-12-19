@@ -9,7 +9,10 @@ var minNodeSize = 5,
 
 var displayingFreq = false;
 
-let stateWidth = window.innerWidth - 500;
+let stateWidth = window.innerWidth / 2;
+let stateHeight = window.innerHeight;
+let sequenceWidth = (window.innerWidth / 2) - 1;
+let sequenceHeight = window.innerHeight;
 // window.onresize = function (e) {
 //     stateWidth = window.innerWidth
 // }
@@ -47,16 +50,15 @@ var prevStroke, prevFill, prevFillOpa, prevStrokeOpa, prevTextFill;
 
 /******************** State graph **********************************/
 
-var stateheight = window.innerHeight;
 var stateforce = d3.layout.force()
     .charge(-1500)
     .linkDistance(1000)
-    .size([stateWidth, stateheight])
+    .size([stateWidth, stateHeight])
     .on("tick", statetick);
 
 svg = d3.select("#state-graph-svg")
     .attr("width", stateWidth)
-    .attr("height", stateheight)
+    .attr("height", stateHeight)
     .attr("pointer-events", "all")
     .call(d3.behavior.zoom().on("zoom", stateZoomPan));
 
@@ -95,9 +97,6 @@ var statedrag = stateforce.drag().on("dragstart", dragstart);
 
 /********************* Behavior graph ******************************/
 
-const sequenceWidth = 500;
-const sequenceHeight = 500;
-
 const minDistance = 50;
 const maxDistance = 500;
 
@@ -110,14 +109,14 @@ var behaviorforce = d3.layout.force()
 svg = d3.select("#sequence-graph-svg")
     .attr("width", sequenceWidth)
     .attr("height", sequenceHeight)
-    .attr("pointer-events", "all")
+    .attr("pointer-events", "fill")
     .call(d3.behavior.zoom().on("zoom", behaviorZoomPan));
 
 
 // the graph components (nodes and links)
 var behaviorSvgContainer = svg.append("g").attr("id", "graph_container");
-var behaviorlink = behaviorSvgContainer.append("g").attr("id", "link_container").selectAll(".behaviorlink"),
-    behaviornode = behaviorSvgContainer.append("g").attr("id", "node_container").selectAll(".behaviornode");
+var behaviorlink = behaviorSvgContainer.append("g").attr("id", "link_container").selectAll(".behaviorlink");
+var behaviornode = behaviorSvgContainer.append("g").attr("id", "node_container").selectAll(".behaviornode");
 
 
 // for sticky drag
@@ -187,7 +186,7 @@ var presetStateNodes = function (nodes) {
 
     nodes[1].fixed = true;
     nodes[1].x = stateWidth - margin;
-    nodes[1].y = stateheight - margin;
+    nodes[1].y = stateHeight - margin;
 };
 
 var state_node_label = function (d) {
@@ -576,7 +575,23 @@ function setNodeForFreq(index) {
 
 var linearScaleBehaviorNode, distanceBehaviorScale;
 
+function returnHTML(d, i) {
+    var nodeinfo = i + " (";
+    if (d.completed) {
+        nodeinfo = nodeinfo + "reach end state)";
+    } else {
+        nodeinfo = nodeinfo + "does not reach end state)"
+    };
+
+    return `<div class="tooltip-inner">
+                <div><span class="tooltip-key">Sequence Node Info: </span>${nodeinfo}</div>
+                <div><span class="tooltip-key">Player IDs with this Pattern:</span> (${d.user_ids.length}) ${d.user_ids.join('')}</div>
+                <div><span class="tooltip-key">Action Sequence: </span>${compressArray(d.action_meaning)}</div>
+            </div>`
+}
+
 function visualizeBehaviorData() {
+    let tooltip = d3.select('#tooltip')
     linearScaleBehaviorNode = getBehaviorNodeScale(data.trajectories);
     distanceBehaviorScale = getBehaviorDistanceScale(data.traj_similarity);
 
@@ -605,10 +620,7 @@ function visualizeBehaviorData() {
                 return fill(d.id)
             }
         })
-        .on("mouseover", function (d) {
-            displayInfo(d)
-            shuffleNodeOrder(d.index)
-        })
+
         //andy disabled
         // .on("dblclick", dblclick)
         // .on("mouseover", displayInfo)
@@ -617,7 +629,23 @@ function visualizeBehaviorData() {
     behaviornode.append("circle")
         .attr("r", function (d) {
             return linearScaleBehaviorNode(d.user_ids.length);
-        });
+        })
+        .attr('pointer-events', 'fill')
+        .attr('cursor', 'pointer')
+        .on("mouseover", function (d, i) {
+            displayInfo(d)
+            shuffleNodeOrder(d.index)
+            tooltip
+                .style('opacity', 1)
+                .style("left", d3.event.pageX + "px")
+                .style("top", d3.event.pageY + "px")
+                .html(returnHTML(d, i))
+        })
+        .on("mouseout", function (d) {
+            tooltip
+                .style('opacity', 0)
+        })
+
     behaviornode.append("text")
         .attr("class", function (d) {
             if (d.completed)
@@ -1008,7 +1036,7 @@ function highlightBehaviorNode(nodeToHighlight, color) {
     d3.select("#behaviornode" + nodeToHighlight).style("stroke-opacity", 1)
         .style("stroke", color)
         .style("fill", color)
-        .style("fill-opacity", 1);
+        .style("fill-opacity", 1)
     // somehow have to set fill for cirle only.
     d3.select("#behaviornode" + nodeToHighlight).select("circle")
         .style("stroke", color)

@@ -19,19 +19,49 @@
             </div>
             <div class="graph-controls">
                 <div class="opacity">
-                    <label for="incrementOpacity">Graph Opacity:</label>
+                    <label for="incrementOpacity">Opacity:</label>
                     <input type="button" id="incrementOpacity" value="+" onclick="incrementOpacity()"></input>
                     <input type="button" id="decrementOpacity" value="-" onclick="decrementOpacity()"></input>
                 </div>
                 <div class="layout-freeze">
-                    <label for="freezeLayout">Freeze Layout:</label>
+                    <label for="freezeLayout">Layout:</label>
                     <input type="button" id="freezeLayout" value="Freeze/Unfreeze" onclick="freezeLayout()"></input>
-                </div>
-                <div class="layout-fix">
-                    <label for="fixLayout">Fix Layout:</label>
                     <input type="button" id="fixLayout" value="Fix/Unfix" onclick="fixLayout()"></input>
                 </div>
             </div>
+        </div>
+        <div class="highlight-controls">
+            <div class="sequence-highlight">
+                <span>Highlight Sequences:</span>
+                <label for="playtrace-index"></label>
+                <input type="text" id="playtrace-index">
+                <input type="button" id="highlightNodeID" value="Go" onclick="highlightNodeID()" />
+                <div class="flex sequence-highlight-modifiers">
+                    <input type="button" id="highlightNodeID_first" value="First" onclick="highlightNodeID_index(0)" />
+                    <input type="button" id="highlightNodeID_last" value="Last" onclick="highlightNodeID_index(-1)" />
+                    <input type="button" id="highlightNodeID_reverse" value="Reverse" onclick="highlightNodeID(true)" />
+                </div>
+            </div>
+            <div class="user-highlight">
+                <label for="userID">Highlight UserIDs:</label>
+                <input type="text" id="userID" />
+                <input type="button" id="highlightUserID" value="Go" onclick="highlightUserID()" />
+            </div>
+            <div class="group-highlight">
+                <label for="highlightGroup1">Highlight Groups:</label>
+                <input type="button" id="highlightGroup1" value="blue" onclick="highlightGroup(1)" />
+                <input type="button" value="red" onclick="highlightGroup(2)" />
+                <input type="button" value="All" onclick="highlightGroup(0)" />
+            </div>
+            <div class="k-highlight">
+                <label for="number-highlight">Highlight K Most Frequent:</label>
+                <input type="text" id="number-highlight">
+                <input type="button" id="toggleFrequentTrajectories" value="Go" onclick="toggleHighlightFreqTrajectories()" />
+            </div>
+            <div class="kth-highlight">
+                <input type="button" id="toggleKthTrajectories" value="Highlight K-th Most Frequent" onclick="toggleKthTrajectories()" />
+            </div>
+            <input type="button" class="clear-highlight" id="clearHighlight" value="Clear All Highlights" onclick="clearHighlight(); clearTextField()" />
         </div>
         <div class="state-graph-container">
             <div class="state-graph-title">State Graph</div>
@@ -40,7 +70,6 @@
                 <input type="button" id="incrementStateGraph" value="+" onclick="incrementGraph(0)" />
                 <input type="button" id="decrementStateGraph" value="-" onclick="decrementGraph(0)" />
             </div>
-
             <svg id="state-graph-svg"></svg>
             <div class="state-graph-details">
                 <label for="level-id">Level:</label>
@@ -53,59 +82,23 @@
         </div>
 
         <div class="sequence-graph-container">
-            <div class="highlight-controls">
-                <div class="sequence-highlight">
-                    <span>Highlight Sequences:</span>
-                    <label for="playtrace-index"></label>
-                    <input type="text" id="playtrace-index">
-                    <input type="button" id="highlightNodeID" value="Go" onclick="highlightNodeID()" />
-                    <div class="flex sequence-highlight-modifiers">
-                        <input type="button" id="highlightNodeID_first" value="First" onclick="highlightNodeID_index(0)" />
-                        <input type="button" id="highlightNodeID_last" value="Last" onclick="highlightNodeID_index(-1)" />
-                        <input type="button" id="highlightNodeID_reverse" value="Reverse" onclick="highlightNodeID(true)" />
-                    </div>
-                </div>
-                <div class="user-highlight">
-                    <label for="userID">Highlight UserIDs:</label>
-                    <input type="text" id="userID" />
-                    <input type="button" id="highlightUserID" value="Go" onclick="highlightUserID()" />
-                </div>
-                <div class="group-highlight">
-                    <label for="highlightGroup1">Highlight Groups:</label>
-                    <input type="button" id="highlightGroup1" value="blue" onclick="highlightGroup(1)" />
-                    <input type="button" value="red" onclick="highlightGroup(2)" />
-                    <input type="button" value="All" onclick="highlightGroup(0)" />
-                </div>
-                <div class="k-highlight">
-                    <label for="number-highlight">Highlight K Most Frequent:</label>
-                    <input type="text" id="number-highlight">
-                    <input type="button" id="toggleFrequentTrajectories" value="Go" onclick="toggleHighlightFreqTrajectories()" />
-                </div>
-                <div class="kth-highlight">
-                    <input type="button" id="toggleKthTrajectories" value="Highlight K-th Most Frequent" onclick="toggleKthTrajectories()" />
-                </div>
-                <input type="button" class="clear-highlight" id="clearHighlight" value="Clear All Highlights" onclick="clearHighlight(); clearTextField()" />
+            <div class="total-sequences">Total Sequences: <span class="num-sequences" id="num-sequences"></span></div>
+            <svg class="sequence-graph-svg" id="sequence-graph-svg"></svg>
+            <div class="sequence-graph-controls">
+                <label for="incrementSequenceGraph">Graph Size:</label>
+                <input type="button" value="+" id="incrementSequenceGraph" onclick="incrementGraph(1)" />
+                <input type="button" value="-" onclick="decrementGraph(1)" />
+                <label for="toggleShowLinks">Show/Hide Links</label>
+                <input type="button" id="toggleShowLinks" value="Show/Hide" onclick="toggleShowLinks()" />
             </div>
-            <div class="sequence-graph-div">
-                <div class="total-sequences">Total Sequences: <span class="num-sequences" id="num-sequences"></span></div>
-                <svg class="sequence-graph-svg" id="sequence-graph-svg"></svg>
-                <div class="sequence-graph-controls">
-                    <label for="incrementSequenceGraph">Graph Size:</label>
-                    <input type="button" value="+" id="incrementSequenceGraph" onclick="incrementGraph(1)" />
-                    <input type="button" value="-" onclick="decrementGraph(1)" />
-                    <label for="toggleShowLinks">Show/Hide Links</label>
-                    <input type="button" id="toggleShowLinks" value="Show/Hide" onclick="toggleShowLinks()" />
-                </div>
+            <div class="sequence-graph-details">
+                <div class="complete-sequencee">Complete sequence (<label id="num-states-in-trajectory"></label>
+                    states):
+                    <span style="color:red"><label id="infobox"></label></span></div>
             </div>
-            <div>
-                <b>Sequence Node Info</b> (updated when node selected) - ID = <div id="selected-node-index"></div>
-                <br />
-                Player IDs having this pattern (<label id="num-players-sequence"></label> players): <label id="players-sequence"></label><br />
-                Action sequence: <span style="color:purple"><b><label id="actionseq-info"></label></b></span><br /><br />
-                Complete sequence (<label id="num-states-in-trajectory"></label> states): <span style="color:red"><b><label
-                            id="infobox"></label></b></span><br />
-
-            </div>
+        </div>
+        <div id="tooltip">
+            hello
         </div>
     </div>
 
