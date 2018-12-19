@@ -62,11 +62,12 @@ body {
 
 .state-graph-container {
     float: right;
+    position: relative;
     /* border-left: 1px solid black; */
 }
 
 .state-graph-title {
-    position: relative;
+    position: absolute;
     top: 10px;
     left: 10px;
     font-weight: 700;
@@ -101,6 +102,8 @@ body {
     background-color: white;
     float: left;
     border-right: 1px solid black;
+    position: relative;
+    z-index: -100;
 }
 
 .sequence-graph-svg {
@@ -112,7 +115,20 @@ body {
     margin: .2rem 0 0 .2rem;
 }
 
-.sequence-graph-details {
+.sequence-graph-title {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: 700;
+    font-size: .8rem;
+    text-align: center;
+    border: 1px black solid;
+    background-color: lightgrey;
+    width: 100px;
+    padding: .5rem;
+}
+
+.complete-sequence-container {
     bottom: 0px;
     position: absolute;
     background-color: lightgrey;

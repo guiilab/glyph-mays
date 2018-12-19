@@ -82,6 +82,7 @@
         </div>
 
         <div class="sequence-graph-container">
+            <div class="sequence-graph-title">Sequence Graph</div>
             <div class="total-sequences">Total Sequences: <span class="num-sequences" id="num-sequences"></span></div>
             <svg class="sequence-graph-svg" id="sequence-graph-svg"></svg>
             <div class="sequence-graph-controls">
@@ -91,14 +92,13 @@
                 <label for="toggleShowLinks">Show/Hide Links</label>
                 <input type="button" id="toggleShowLinks" value="Show/Hide" onclick="toggleShowLinks()" />
             </div>
-            <div class="sequence-graph-details">
-                <div class="complete-sequencee">Complete sequence (<label id="num-states-in-trajectory"></label>
-                    states):
-                    <span style="color:red"><label id="infobox"></label></span></div>
-            </div>
+        </div>
+        <div class="complete-sequence-container">
+            <div class="complete-sequence">Complete sequence (<label id="num-states-in-trajectory"></label>
+                states):
+                <span style="color:red"><label id="infobox"></label></span></div>
         </div>
         <div id="tooltip">
-            hello
         </div>
     </div>
 

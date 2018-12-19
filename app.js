@@ -61,12 +61,9 @@ svg = d3.select("#state-graph-svg")
     .attr("height", stateHeight)
     .attr("pointer-events", "all")
     .call(d3.behavior.zoom().on("zoom", stateZoomPan))
+    .on("dblclick.zoom", null)
     .append("svg:g")
     .attr("transform", "translate(200,200)scale(.5,.5)");
-
-//andy
-//disable double click zoom
-svg.on("dblclick.zoom", null)
 
 
 // the graph components (nodes and links)
@@ -111,8 +108,9 @@ var behaviorforce = d3.layout.force()
 svg = d3.select("#sequence-graph-svg")
     .attr("width", sequenceWidth)
     .attr("height", sequenceHeight)
-    .attr("pointer-events", "fill")
-    .call(d3.behavior.zoom().on("zoom", behaviorZoomPan));
+    .attr("pointer-events", "all")
+    .call(d3.behavior.zoom().on("zoom", behaviorZoomPan))
+    .on("dblclick.zoom", null)
 
 
 // the graph components (nodes and links)
@@ -166,7 +164,7 @@ function updateJSON(error, json) {
 function updateLevel() {
     clearHighlight();
     clearTextField();
-    sID = d3.select("#drop-down").node().value;
+    sID = d3.select("#level-select").node().value;
     d3.json('data/' + sID + file_suffix + '.json', updateJSON);
 }
 
