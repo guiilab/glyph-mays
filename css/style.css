@@ -128,7 +128,7 @@ body {
 .sequence-graph-details {
     position: absolute;
     top: 8px;
-    right: 150px;
+    right: 135px;
     padding: var(--padding);
 }
 
@@ -159,7 +159,7 @@ body {
     margin: .2rem 0 0 .2rem;
 } */
 
-.num-sequences {
+.detail-nums {
     font-weight: 700;
 }
 
