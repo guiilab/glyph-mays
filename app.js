@@ -60,7 +60,9 @@ svg = d3.select("#state-graph-svg")
     .attr("width", stateWidth)
     .attr("height", stateHeight)
     .attr("pointer-events", "all")
-    .call(d3.behavior.zoom().on("zoom", stateZoomPan));
+    .call(d3.behavior.zoom().on("zoom", stateZoomPan))
+    .append("svg:g")
+    .attr("transform", "translate(200,200)scale(.5,.5)");
 
 //andy
 //disable double click zoom

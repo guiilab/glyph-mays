@@ -118,7 +118,6 @@ body {
     background-color: lightgrey;
     border: 1px solid black;
     padding: var(--padding);
-    width: 100%;
 }
 
 .total-sequences {
