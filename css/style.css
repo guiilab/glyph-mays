@@ -224,11 +224,17 @@ body {
 }
 
 .complete-sequence-container {
+    left: 0px;
     bottom: 0px;
     position: absolute;
     background-color: lightgrey;
-    border: 1px solid black;
+    border-top: 1px solid black;
     padding: var(--padding);
+    opacity: 0;
+}
+
+.complete-sequence-active {
+    opacity: 1;
 }
 
 /* .total-sequences {

@@ -77,8 +77,12 @@
                 <div for="num-statenodes">State Nodes: <span class="detail-nums" id="num-statenodes"></span></div>
                 <div class="detail-nums" id="num-statenodes"></div>
                 <div for="num-players">Players: <span class="detail-nums" id="num-players"></span></div>
-
             </div>
+            <div id="complete-sequence-container" class="complete-sequence-container">
+                    <div class="complete-sequence">Complete sequence (<label id="num-states-in-trajectory"></label>
+                        states):
+                        <span style="color:red"><label id="infobox"></label></span></div>
+                </div>
         </div>
 
         <div class="sequence-graph-container">
@@ -95,11 +99,7 @@
                 <input type="button" id="toggleShowLinks" value="Show/Hide" onclick="toggleShowLinks()" />
             </div>
         </div>
-        <div class="complete-sequence-container">
-            <div class="complete-sequence">Complete sequence (<label id="num-states-in-trajectory"></label>
-                states):
-                <span style="color:red"><label id="infobox"></label></span></div>
-        </div>
+
         <div id="tooltip">
         </div>
     </div>

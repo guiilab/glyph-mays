@@ -633,6 +633,7 @@ function visualizeBehaviorData() {
         .attr('pointer-events', 'fill')
         .attr('cursor', 'pointer')
         .on("mouseover", function (d, i) {
+            activateCompleteSequence()
             displayInfo(d)
             shuffleNodeOrder(d.index)
             tooltip
@@ -1175,5 +1176,12 @@ function toggleHighlightPanel() {
         title.classList.add('highlight-title-inactive')
         button.classList.remove('highlight-button-closed')
         icon.classList.add('highlight-button-icon-closed')
+    }
+}
+
+function activateCompleteSequence() {
+    let complete = document.getElementById('complete-sequence-container')
+    if (!complete.classList.contains('complete-sequence-active')) {
+        complete.classList.add('complete-sequence-active')
     }
 }
