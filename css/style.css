@@ -366,8 +366,8 @@ text.end {
 }
 
 .groupNode {
-    stroke: seagreen;
-    fill: lightseagreen;
+    stroke: steelblue;
+    fill: lightsteelblue;
 }
 
 .groupNode-active {

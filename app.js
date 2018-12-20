@@ -173,6 +173,7 @@ function updateJSON(error, json) {
 function updateLevel() {
     clearHighlight();
     clearTextField();
+    clearGroupNodesActive();
     sID = d3.select("#level-select").node().value;
     d3.json('data/' + sID + file_suffix + '.json', updateJSON);
 }
@@ -1102,6 +1103,7 @@ function showInfoNodeID() {
 
 
 function clearHighlight() {
+
     // clear all styles for state graph
     d3.selectAll(".statelink,.statenode").style("stroke-opacity", null)
         .style("stroke", null)
