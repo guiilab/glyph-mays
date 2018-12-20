@@ -129,6 +129,10 @@ body {
     font-weight: 700;
 }
 
+#playtrace-index {
+    width: 180px;
+}
+
 .sequence-highlight-modifiers {
     position: relative;
     left: 110px;
@@ -374,8 +378,6 @@ text.end {
     stroke: salmon;
     fill: lightsalmon;
 }
-
-
 
 .selectednode {
     stroke-width: 5;

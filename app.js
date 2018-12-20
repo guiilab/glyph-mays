@@ -754,8 +754,16 @@ function visualizeBehaviorData() {
 
 // Group Graph
 
-function visualizeGroupData() {
+function returnGroupHTML(d, i) {
+    // return `<div class="tooltip-inner">
+    //             <div><span class="tooltip-key">Sequence Node Info: </span>${nodeinfo}</div>
+    //             <div><span class="tooltip-key">Player IDs with this Pattern:</span> (${d.user_ids.length}) ${d.user_ids.join('')}</div>
+    //             <div><span class="tooltip-key">Action Sequence: </span>${compressArray(d.action_meaning)}</div>
+    //         </div>`
+}
 
+function visualizeGroupData() {
+    let tooltip = d3.select('#tooltip')
     groupForce.nodes(data.team_trajectories)
         .links(data.team_traj_similarity);
 
@@ -781,6 +789,20 @@ function visualizeGroupData() {
         .attr('r', 15)
         .attr('pointer-events', 'fill')
         .attr('cursor', 'pointer')
+        // .on("mouseover", function (d, i) {
+        //     activateCompleteSequence()
+        //     displayInfo(d)
+        //     shuffleNodeOrder(d.index)
+        //     tooltip
+        //         .style('opacity', 1)
+        //         .style("left", d3.event.pageX + "px")
+        //         .style("top", d3.event.pageY + "px")
+        //         .html(returnGroupHTML(d, i))
+        // })
+        // .on("mouseout", function (d) {
+        //     tooltip
+        //         .style('opacity', 0)
+        // })
         .on("click", function(d) {
             clearGroupNodesActive()
             d3.select(this).classed('groupNode-active', true)
@@ -1171,27 +1193,31 @@ var constructGroupKey = function (feature, groupValue) {
 };
 
 // flag: 1: team2, blue; 2: team3, red; 0: all
-var highlightGroup = function (flag) {
+var highlightGroup = function (condition) {
     clearHighlight();
     applyOpacity(lowestOpacity);
-    switch (flag) {
-        case 1:
-            highlightGroupWithName('blue', 'blue');  //<!team2>
+    switch (condition) {
+        case 'High':
+            highlightGroupWithName(condition, 'blue');  //<!team2>
             break;
-        case 2:
-            highlightGroupWithName('red', 'red');  //<!team3>
+        case 'Low':
+            highlightGroupWithName(condition, 'red');  //<!team3>
             break;
-        default:
-            highlightGroupWithName('blue', 'blue');  //<!team2>
-            highlightGroupWithName('red', 'red');  //<!team3>
     }
 };
 
+//working
 var highlightGroupWithName = function (grpName, color) {
+    let arr = []
     _.each(data.trajectories, function (traj, id) {
+        //change this to high or low
         if (traj.teams.indexOf(grpName) > -1)
-            highlightBehaviorNodeIndex(id, color);
+            arr.push(id)
+            // highlightBehaviorNodeIndex(id, color);
     });
+    document.getElementById("playtrace-index").value = arr;
+    highlightNodeID()
+
 };
 
 
