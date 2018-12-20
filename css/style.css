@@ -19,11 +19,12 @@ body {
     background-color: lightgrey;
     border: black solid 1px;
     padding: var(--padding);
-    width: 350px;
+    width: 310px;
+    font-size: .7rem;
 }
 
 .app-title {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: .8rem;
     display: inline-block;
@@ -31,7 +32,7 @@ body {
 
 .level-select-container {
     display: inline-block;
-    margin-left: 2rem;
+    margin-left: 2.5rem;
 }
 
 .graph-controls {
@@ -73,7 +74,7 @@ body {
 }
 
 .highlight-open {
-    width: 350px;
+    width: 340px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
