@@ -165,10 +165,6 @@ body {
     top: 50px;
 }
 
-.state-graph-svg {
-    margin: auto;
-}
-
 .state-graph-details {
     top: 8px;
     left: 110px;
@@ -190,10 +186,6 @@ body {
     border-right: 1px solid black;
     position: relative;
     z-index: -100;
-}
-
-.sequence-graph-svg {
-    margin: auto;
 }
 
 .sequence-graph-controls {
@@ -221,6 +213,16 @@ body {
     background-color: lightgrey;
     width: 100px;
     padding: .5rem;
+}
+
+.group-graph-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 300px;
+    border: black solid 1px;
+    background-color: white;
 }
 
 .complete-sequence-container {

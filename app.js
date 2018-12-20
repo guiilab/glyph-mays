@@ -13,10 +13,13 @@ let stateWidth = window.innerWidth / 2;
 let stateHeight = window.innerHeight;
 let sequenceWidth = (window.innerWidth / 2) - 1;
 let sequenceHeight = window.innerHeight;
+let groupHeight = 300;
+let groupWidth = 300;
 // window.onresize = function (e) {
 //     stateWidth = window.innerWidth
 // }
 var div, svg;
+var groupSvg;
 
 var userIDLengthLimit = 10;
 file_suffix = '';
@@ -68,7 +71,6 @@ svg = d3.select("#state-graph-svg")
 
 // the graph components (nodes and links)
 var stateSvgContainer = svg.append("g").attr("id", "stategraph_container");
-
 let statelink = stateSvgContainer.append("g").attr("id", "statelink_container").selectAll(".statelink");
 let statenode = stateSvgContainer.append("g").attr("id", "statenode_container").selectAll(".statenode");
 
@@ -151,12 +153,14 @@ function updateJSON(error, json) {
     });
 
     visualizeStateData();
-
+    // visualizeGroupData();
+    
     // update info on num nodes and players
     d3.select("#num-sequences").text(data.trajectories.length);
     d3.selectAll("#num-players").text(data.num_users);
 
     visualizeBehaviorData();
+
     showLinks = true;
     toggleShowLinks();
 }
@@ -337,6 +341,37 @@ function visualizeStateData() {
 
 }
 
+
+// Group Graph
+
+var groupForce = d3.layout.force()
+    .charge(-100)
+    // .linkDistance(distanceMapping)
+    .linkDistance(100)
+    .size([groupWidth, groupHeight])
+    .on("tick", groupTick);
+
+groupSvg = d3.select("#group-graph-svg")
+    .attr("width", groupWidth)
+    .attr("height", groupHeight)
+    .attr("pointer-events", "all")
+    .call(d3.behavior.zoom().on("zoom", behaviorZoomPan))
+    .on("dblclick.zoom", null)
+
+
+// the graph components (nodes and links)
+var groupSvgContainer = groupSvg.append("g").attr("id", "group-graph-container");
+var groupLink = groupSvgContainer.append("g").attr("id", "group-link-container").selectAll(".groupLink");
+var groupNode = groupSvgContainer.append("g").attr("id", "group-node-container").selectAll(".groupNode");
+
+
+// for sticky drag
+var groupDrag = groupForce.drag()
+    .on("dragstart", groupDragStart);
+
+//--------------- Functions ------------
+
+
 // flag: 1 - popularity, 2 - look significant
 // can create function instead of copying codes
 var changeStateNodeSizeType = function (flag) {
@@ -374,8 +409,6 @@ var changeStateNodeSizeType = function (flag) {
 };
 
 function statetick(e) {
-
-
     statelink.attr("d", function (d) {
         var x1 = d.source.x,
             y1 = d.source.y,
@@ -710,8 +743,82 @@ function visualizeBehaviorData() {
     behaviorlink.exit().remove();
     behaviornode.exit().remove();
     behaviorforce.start();
-
 }
+
+// Group Graph
+
+function visualizeGroupData() {
+
+    groupForce.nodes(data.trajectories)
+        .links(data.traj_similarity);
+
+    groupLink = groupLink.data(data.traj_similarity);
+    groupNode = groupNode.data(data.trajectories);
+
+    groupLink.exit().remove();
+    groupNode.exit().remove();
+
+    groupLink.enter().append("line")
+        .attr("class", "groupLink")
+        .attr("id", function (d, i) {
+            return 'groupLink';
+        });
+
+    groupNode.enter().append("g")
+        .attr("id", function (d, i) {
+            return 'groupNode';
+        })
+        // .attr("color", function (d) {
+        //     if (d.id > 20) {
+        //         let divisor = Math.floor(d.id / 20)
+        //         let new_id = d.id - (20 * divisor)
+        //         return fill(new_id)
+        //     } else {
+        //         return fill(d.id)
+        //     }
+        // })
+        .call(groupDrag);
+
+    groupNode.append("ellipse")
+        .attr('rx', 10)
+        .attr('pointer-events', 'fill')
+        .attr('cursor', 'pointer')
+
+    groupNode.append("text")
+
+        .attr("dy", ".35em")
+        // .attr("font-size", function (d) {
+        //     return maxNodeSize;
+        // })
+        // .text(function (d, i) {
+        //     return i;
+        // });
+
+    // UPDATE --------------------
+    groupLink.attr("id", function (d, i) {
+        return 'groupLink';
+    })
+        .attr("class", "groupLink");
+
+    groupNode.attr("id", function (d, i) {
+        return 'groupNode' + i;
+    })
+        .select("ellipse")
+        .attr('r', 10)
+
+
+    groupNode.select("text")
+
+        .attr("font-size", function (d) {
+            return maxNodeSize;
+        })
+        .text(function (d, i) {
+            return i;
+        });
+    groupForce.start();
+}
+
+
 
 //Andy
 function shuffleNodeOrder(node) {
@@ -741,6 +848,25 @@ function behaviortick() {
             return d.target.y;
         });
     behaviornode
+        .attr("transform", function (d) {
+            return "translate(" + d.x + "," + d.y + ")";
+        });
+}
+
+function groupTick() {
+    groupLink.attr("x1", function (d) {
+        return d.source.x;
+    })
+        .attr("y1", function (d) {
+            return d.source.y;
+        })
+        .attr("x2", function (d) {
+            return d.target.x;
+        })
+        .attr("y2", function (d) {
+            return d.target.y;
+        });
+    groupNode
         .attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")";
         });
@@ -854,6 +980,16 @@ function behaviorDragstart(d, i) {
     clearHighlight();
     applyOpacity(lowestOpacity);
     highlightBehaviorNodeIndex(i, "red");
+    archiveStyle(this);
+}
+
+function groupDragStart(d, i) {
+    d3.event.sourceEvent.stopPropagation();
+
+    // Highlight the behavior
+    clearHighlight();
+    // applyOpacity(lowestOpacity);
+    // highlightBehaviorNodeIndex(i, "red");
     archiveStyle(this);
 }
 
