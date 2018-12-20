@@ -99,10 +99,13 @@
                 <input type="button" id="toggleShowLinks" value="Show/Hide" onclick="toggleShowLinks()" />
             </div>
         </div>
-        <div class="group-graph-container">
+        <div id="group-graph-container" class="group-graph-container none">
+            <div class="group-graph-title">Group Graph</div>
+            <div class="group-graph-details">
+                <div class="group-trajectories-container">Total Trajectories:<span id="group-trajectories"></span></div>
+            </div>
             <svg id="group-graph-svg" class="group-graph-svg"></svg>
         </div>
-
         <div id="tooltip">
         </div>
     </div>

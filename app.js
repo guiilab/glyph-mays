@@ -13,8 +13,8 @@ let stateWidth = window.innerWidth / 2;
 let stateHeight = window.innerHeight;
 let sequenceWidth = (window.innerWidth / 2) - 1;
 let sequenceHeight = window.innerHeight;
-let groupHeight = 300;
-let groupWidth = 300;
+let groupHeight = 250;
+let groupWidth = 250;
 // window.onresize = function (e) {
 //     stateWidth = window.innerWidth
 // }
@@ -153,7 +153,12 @@ function updateJSON(error, json) {
     });
 
     visualizeStateData();
-    // visualizeGroupData();
+    if (data.team_trajectories) {
+        let group = document.getElementById('group-graph-container')
+        group.classList.remove('none')
+        d3.select("#group-trajectories").text(data.team_trajectories.length);
+        visualizeGroupData();
+    }
     
     // update info on num nodes and players
     d3.select("#num-sequences").text(data.trajectories.length);
@@ -642,6 +647,7 @@ function visualizeBehaviorData() {
 
     behaviornode.enter().append("g")
         .attr("id", function (d, i) {
+
             return 'behaviornode' + i;
         })
         .attr("color", function (d) {
@@ -708,8 +714,8 @@ function visualizeBehaviorData() {
     })
         .attr("class", function (d) {
             if (d.completed)
-                return `behaviornode complete ${d.user_ids[0]}`;
-            return `behaviornode incomplete ${d.user_ids[0]}`;
+                return `behaviornode complete ${d.user_ids[0]} ${d.id}`;
+            return `behaviornode incomplete ${d.user_ids[0]} ${d.id}`;
         })
         .attr("node_index", function (d) {
             return d.id
@@ -749,50 +755,43 @@ function visualizeBehaviorData() {
 
 function visualizeGroupData() {
 
-    groupForce.nodes(data.trajectories)
-        .links(data.traj_similarity);
+    groupForce.nodes(data.team_trajectories)
+        .links(data.team_traj_similarity);
 
-    groupLink = groupLink.data(data.traj_similarity);
-    groupNode = groupNode.data(data.trajectories);
-
-    groupLink.exit().remove();
-    groupNode.exit().remove();
+    groupLink = groupLink.data(data.team_traj_similarity);
+    groupNode = groupNode.data(data.team_trajectories);
 
     groupLink.enter().append("line")
         .attr("class", "groupLink")
         .attr("id", function (d, i) {
-            return 'groupLink';
+            return 'groupLink' + d.id;
         });
 
     groupNode.enter().append("g")
-        .attr("id", function (d, i) {
-            return 'groupNode';
+        .attr("class", function(d) {
+            return `groupNode groupNode${d.id}`
         })
-        // .attr("color", function (d) {
-        //     if (d.id > 20) {
-        //         let divisor = Math.floor(d.id / 20)
-        //         let new_id = d.id - (20 * divisor)
-        //         return fill(new_id)
-        //     } else {
-        //         return fill(d.id)
-        //     }
-        // })
         .call(groupDrag);
 
-    groupNode.append("ellipse")
-        .attr('rx', 10)
+    groupNode.append("circle")
+        .attr("id", function (d, i) {
+            return 'groupNode' + i;
+        })
+        .attr('r', 15)
         .attr('pointer-events', 'fill')
         .attr('cursor', 'pointer')
+        .on("click", function(d) {
+            clearGroupNodesActive()
+            d3.select(this).classed('groupNode-active', true)
+            highlightIndTrajectories(d)
+        })
 
     groupNode.append("text")
-
-        .attr("dy", ".35em")
-        // .attr("font-size", function (d) {
-        //     return maxNodeSize;
-        // })
-        // .text(function (d, i) {
-        //     return i;
-        // });
+        .attr("dx", ".9em")
+        .attr("dy", ".4em")
+        .text(function (d, i) {
+            return i;
+        });
 
     // UPDATE --------------------
     groupLink.attr("id", function (d, i) {
@@ -800,22 +799,48 @@ function visualizeGroupData() {
     })
         .attr("class", "groupLink");
 
-    groupNode.attr("id", function (d, i) {
-        return 'groupNode' + i;
-    })
-        .select("ellipse")
-        .attr('r', 10)
+    groupNode
+        .select("circle")
+        .attr('r', 15)
 
 
     groupNode.select("text")
 
         .attr("font-size", function (d) {
-            return maxNodeSize;
+            return 20;
         })
         .text(function (d, i) {
             return i;
         });
+
+    groupLink.exit().remove();
+    groupNode.exit().remove();
     groupForce.start();
+}
+
+function clearGroupNodesActive() {
+    d3.selectAll('.groupNode')
+        .each(function(d) {
+            let el = document.getElementById(`groupNode${d.index}`)
+            if (el.classList.contains('groupNode-active')) {
+                el.classList.remove('groupNode-active')
+            }
+        })
+}
+
+function toggleGroupNodeActive() {
+    
+}
+
+function unique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
+function highlightIndTrajectories(d) {
+    let uniqueTraj = d.team_members_index.filter(unique)
+    setPlaytraceIndex(uniqueTraj)
+    highlightNodeID()
+
 }
 
 
@@ -1038,10 +1063,16 @@ var highlightNodeID = function (reverse = false, hoverNode) {
 
 var setPlaytraceIndex = function (d) {
     let arr = []
-    d.user_ids.forEach((u) => {
-        let node_index = d3.select(`.${u}`).attr('node_index')
-        arr.push(node_index)
-    })
+    if (d.user_ids) {
+        d.user_ids.forEach((u) => {
+            let node_index = d3.select(`.${u}`).attr('node_index')
+            arr.push(node_index)
+        })
+    } else {
+        d.forEach((u) => {
+            arr.push(u)
+        })
+    }
     document.getElementById("playtrace-index").value = arr;
 }
 
