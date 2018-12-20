@@ -974,7 +974,7 @@ var highlightUserID = function () {
     _.each(userIDs, function (userID, id) {
         var trajIndex = -1;
         for (var i = 0; i < data.trajectories.length; i++) {
-            if (_.contains(data.trajectories[i].user_ids, userID)) {
+            if (_.includes(data.trajectories[i].user_ids, userID)) {
                 trajIndex = i;
                 break;
             }
