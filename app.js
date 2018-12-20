@@ -1155,3 +1155,25 @@ var decrementGraph = function (forceChoice) {
     var currentCharge = force.charge();
     force.charge(currentCharge * 0.7).start();
 };
+
+function toggleHighlightPanel() {
+    let panel = document.getElementById('highlight-controls')
+    let title = document.getElementById('highlight-title')
+    let button = document.getElementById('highlight-button')
+    let icon = document.getElementById('highlight-button-icon')
+    if (panel.classList.contains('highlight-open')) {
+        panel.classList.remove('highlight-open')
+        panel.classList.add('highlight-closed')
+        title.classList.remove('highlight-title-inactive')
+        title.classList.add('highlight-title-active')
+        button.classList.add('highlight-button-closed')
+        icon.classList.remove('highlight-button-icon-closed')
+    } else {
+        panel.classList.remove('highlight-closed')
+        panel.classList.add('highlight-open')
+        title.classList.remove('highlight-title-active')
+        title.classList.add('highlight-title-inactive')
+        button.classList.remove('highlight-button-closed')
+        icon.classList.add('highlight-button-icon-closed')
+    }
+}

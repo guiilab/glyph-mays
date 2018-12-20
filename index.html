@@ -30,38 +30,40 @@
                 </div>
             </div>
         </div>
-        <div class="highlight-controls">
-            <div class="sequence-highlight">
+        <div id="highlight-controls" class="highlight-controls highlight-closed">
+            <div id="highlight-title" class="highlight-title highlight-title-active">Highlights</div>
+            <div class="highlight-button highlight-button-closed" id="highlight-button" onclick="toggleHighlightPanel()"><span id="highlight-button-icon" class="highlight-button-icon highlight-icon-closed">+</span></div>
+            <div class="sequence-highlight highlight-hide">
                 <span>Highlight Sequences:</span>
                 <label for="playtrace-index"></label>
                 <input type="text" id="playtrace-index">
                 <input type="button" id="highlightNodeID" value="Go" onclick="highlightNodeID()" />
-                <div class="flex sequence-highlight-modifiers">
+                <div class="sequence-highlight-modifiers">
                     <input type="button" id="highlightNodeID_first" value="First" onclick="highlightNodeID_index(0)" />
                     <input type="button" id="highlightNodeID_last" value="Last" onclick="highlightNodeID_index(-1)" />
                     <input type="button" id="highlightNodeID_reverse" value="Reverse" onclick="highlightNodeID(true)" />
                 </div>
             </div>
-            <div class="user-highlight">
+            <div class="user-highlight highlight-hide">
                 <label for="userID">Highlight UserIDs:</label>
                 <input type="text" id="userID" />
                 <input type="button" id="highlightUserID" value="Go" onclick="highlightUserID()" />
             </div>
-            <div class="group-highlight">
+            <div class="group-highlight highlight-hide">
                 <label for="highlightGroup1">Highlight Groups:</label>
                 <input type="button" id="highlightGroup1" value="blue" onclick="highlightGroup(1)" />
                 <input type="button" value="red" onclick="highlightGroup(2)" />
                 <input type="button" value="All" onclick="highlightGroup(0)" />
             </div>
-            <div class="k-highlight">
-                <label for="number-highlight">Highlight K Most Frequent:</label>
+            <div class="k-highlight highlight-hide">
+                <label for="number-highlight">Enter K:</label>
                 <input type="text" id="number-highlight">
-                <input type="button" id="toggleFrequentTrajectories" value="Go" onclick="toggleHighlightFreqTrajectories()" />
+                <input type="button" id="toggleFrequentTrajectories" value="Highlight K Most Frequent" onclick="toggleHighlightFreqTrajectories()" />
             </div>
-            <div class="kth-highlight">
+            <div class="kth-highlight highlight-hide">
                 <input type="button" id="toggleKthTrajectories" value="Highlight K-th Most Frequent" onclick="toggleKthTrajectories()" />
             </div>
-            <input type="button" class="clear-highlight" id="clearHighlight" value="Clear All Highlights" onclick="clearHighlight(); clearTextField()" />
+            <input type="button" class="clear-highlight highlight-hide" id="clearHighlight" value="Clear All Highlights" onclick="clearHighlight(); clearTextField()" />
         </div>
         <div class="state-graph-container">
             <div class="state-graph-title">State Graph</div>
@@ -72,11 +74,6 @@
             </div>
             <svg id="state-graph-svg"></svg>
             <div class="state-graph-details">
-                <!-- <div>
-                    <div for="level-id">Level:<div id="level-id"></div>
-                    </div>
-                </div> -->
-
                 <div for="num-statenodes">State Nodes: <span class="detail-nums" id="num-statenodes"></span></div>
                 <div class="detail-nums" id="num-statenodes"></div>
                 <div for="num-players">Players: <span class="detail-nums" id="num-players"></span></div>

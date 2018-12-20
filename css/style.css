@@ -43,22 +43,99 @@ body {
 
 .highlight-controls {
     position: absolute;
+    font-size: .7rem;
     top: 100px;
-    height: 200px;
+    height: 180px;
     left: 0;
-    width: 350px;
     background-color: lightgrey;
-    padding: var(--padding);
     border: 1px solid black;
+    border: 1px solid black;
+    padding: var(--padding);
+    transition: .3s;
+}
+
+.highlight-title {
+    position: absolute;
+    transform: rotate(-90deg);
+    font-weight: 700;
+    font-size: 1.2rem;
+    top: 90px;
+    left: -20px;
+    transition: .1s;
+}
+
+.highlight-title-active {
+    opacity: 1
+}
+
+.highlight-title-inactive {
+    opacity: 0
+}
+
+.highlight-open {
+    width: 350px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
+.highlight-open > .highlight-hide {
+    opacity: 1;
+    transition: .7s;
+}
+
+.highlight-closed {
+    width: 25px;
+}
+
+.highlight-closed > .highlight-hide {
+    opacity: 0;
+    transition: .1s;
+}
+
+.highlight-button {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    background-color: coral;
+    border: black solid 1px;
+    position: absolute;
+    right: -22px;
+    top: -1px;
+    padding: 0;
+    transition: .2s;
+}
+
+.highlight-button-closed {
+    background-color: lightgreen
+}
+
+.highlight-button-icon {
+    position: absolute;
+    top: -7px;
+    right: 2px;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.highlight-button-icon-closed {
+    transform: rotate(-45deg)
+}
+
 .clear-highlight {
-    margin-top: 1rem;
+    margin-top: .5rem;
     height: 30px;
     font-weight: 700;
+}
+
+.sequence-highlight-modifiers {
+    position: relative;
+    left: 110px;
+}
+
+.kth-highlight {
+    position: relative;
+    left: 170px; 
 }
 
 .state-graph-container {
@@ -305,11 +382,6 @@ text {
 
 .grid path {
     stroke-width: 0;
-}
-
-.flex {
-    display: flex;
-    justify-content: flex-end;
 }
 
 #tooltip {
