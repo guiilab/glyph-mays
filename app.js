@@ -1,5 +1,6 @@
 var fill = d3.scale.category20()
 var data;
+var prefix = 'a';
 
 var minNodeSize = 5,
     maxNodeSize = 30,
@@ -159,7 +160,7 @@ function updateJSON(error, json) {
         d3.select("#group-trajectories").text(data.team_trajectories.length);
         visualizeGroupData();
     }
-    
+
     // update info on num nodes and players
     d3.select("#num-sequences").text(data.trajectories.length);
     d3.selectAll("#num-players").text(data.num_users);
@@ -714,9 +715,10 @@ function visualizeBehaviorData() {
         return 'behaviornode' + i;
     })
         .attr("class", function (d) {
+            let userId = d.user_ids[0];
             if (d.completed)
-                return `behaviornode complete ${d.user_ids[0]} ${d.id}`;
-            return `behaviornode incomplete ${d.user_ids[0]} ${d.id}`;
+                return `behaviornode complete ${prefix}${userId}`;
+            return `behaviornode incomplete ${prefix}${userId}`;
         })
         .attr("node_index", function (d) {
             return d.id
@@ -777,7 +779,7 @@ function visualizeGroupData() {
         });
 
     groupNode.enter().append("g")
-        .attr("class", function(d) {
+        .attr("class", function (d) {
             return `groupNode groupNode${d.id}`
         })
         .call(groupDrag);
@@ -803,7 +805,7 @@ function visualizeGroupData() {
         //     tooltip
         //         .style('opacity', 0)
         // })
-        .on("click", function(d) {
+        .on("click", function (d) {
             clearGroupNodesActive()
             d3.select(this).classed('groupNode-active', true)
             highlightIndTrajectories(d)
@@ -843,7 +845,7 @@ function visualizeGroupData() {
 
 function clearGroupNodesActive() {
     d3.selectAll('.groupNode')
-        .each(function(d) {
+        .each(function (d) {
             let el = document.getElementById(`groupNode${d.index}`)
             if (el.classList.contains('groupNode-active')) {
                 el.classList.remove('groupNode-active')
@@ -852,10 +854,10 @@ function clearGroupNodesActive() {
 }
 
 function toggleGroupNodeActive() {
-    
+
 }
 
-function unique(value, index, self) { 
+function unique(value, index, self) {
     return self.indexOf(value) === index;
 }
 
@@ -1101,7 +1103,8 @@ var setPlaytraceIndex = function (d) {
 
 var highlightNodeStroke = function (nodes, bool) {
     nodes.user_ids.forEach(d => {
-        d3.select(`.${d}`).classed('selectednode', bool)
+        let e = `${prefix}${d}`
+        d3.selectAll(`.${e}`).classed('selectednode', bool)
     })
 };
 
@@ -1213,7 +1216,7 @@ var highlightGroupWithName = function (grpName, color) {
         //change this to high or low
         if (traj.teams.indexOf(grpName) > -1)
             arr.push(id)
-            // highlightBehaviorNodeIndex(id, color);
+        // highlightBehaviorNodeIndex(id, color);
     });
     document.getElementById("playtrace-index").value = arr;
     highlightNodeID()
